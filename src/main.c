@@ -265,22 +265,21 @@ int SimpleDenoise_Proc(SimpleDenoiseHandle *handle, const float *input, float *o
     return 1;
 }
 
-void printUsage()
+void printUsage(char *pname)
 {
     printf("usage:\n");
-    printf("./SimpleDenoise input.wav\n");
-    printf("./SimpleDenoise input.mp3\n");
+    printf("%s input.wav\n", pname);
+    printf("%s input.mp3\n", pname);
     printf("or\n");
-    printf("./SimpleDenoise input.wav output.wav\n");
-    printf("./SimpleDenoise input.mp3 output.wav\n");
-    printf("press any key to exit.\n");
-    getchar();
+    printf("%s input.wav output.wav\n", pname);
+    printf("%s input.mp3 output.wav\n", pname);
 }
 
-void simpleDenoise(char *in_file, char *out_file)
+void simpleDenoise(char *in_file, char *out_file, char *pname)
 {
-    if (in_file == NULL || out_file == NULL) {
-        printUsage();
+    if (in_file == NULL || out_file == NULL)
+    {
+        printUsage(pname);
         return;
     }
     uint32_t sampleRate = 0;
@@ -341,15 +340,16 @@ int main(int argc, char *argv[])
 {
     printf("Audio Processing\n");
     printf("blog:http://cpuimage.cnblogs.com/\n");
-    printf("Audio Simple Denoise\n");
+    printf("Simple Audio Denoise\n");
+    char *pname = argv[0];
     if (argc < 2) {
-        printUsage();
+        printUsage(pname);
         return -1;
     }
     char *in_file = argv[1];
     if (argc > 2) {
         char *out_file = argv[2];
-        simpleDenoise(in_file, out_file);
+        simpleDenoise(in_file, out_file, pname);
     }
     else {
         char drive[3];
@@ -359,7 +359,7 @@ int main(int argc, char *argv[])
         char out_file[1024];
         splitpath(in_file, drive, dir, fname, ext);
         sprintf(out_file, "%s%s%s_out.wav", drive, dir, fname);
-        simpleDenoise(in_file, out_file);
+        simpleDenoise(in_file, out_file, pname);
     }
     printf("done.\n");
     return 0;
